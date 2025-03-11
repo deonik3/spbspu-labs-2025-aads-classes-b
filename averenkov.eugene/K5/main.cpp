@@ -4,7 +4,7 @@ template < class T >
 struct BiTree
 {
   T data;
-  BiTree< T >* left
+  BiTree< T >* left;
   BiTree< T >* right;
 };
 
