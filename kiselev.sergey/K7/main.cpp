@@ -6,7 +6,7 @@
 template< typename T >
 std::ostream& output(std::ostream& out, kiselev::BiTree< T >* root, const std::string& text)
 {
-    kiselev::BiTreeIterator< T > it{ root };
+  kiselev::BiTreeIterator< T > it{ root };
   if (text == "tomax")
   {
     while (it.hasPrev())
@@ -61,6 +61,8 @@ int main()
     std::string command;
     std::cin >> command;
     output(std::cout, root, command);
+    kiselev::deleteTree(root);
+    return 0;
   }
   catch (const std::exception& e)
   {

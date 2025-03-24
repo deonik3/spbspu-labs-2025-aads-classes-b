@@ -19,7 +19,7 @@ namespace kiselev
     const T& data() const;
   };
 
-  template< typename T >
+  template< class T >
   bool BiTreeIterator< T >::hasPrev() const
   {
     if (!node)
@@ -38,7 +38,7 @@ namespace kiselev
     return !temp->parent;
   }
 
-  template< typename T >
+  template< class T >
   bool BiTreeIterator< T >::hasNext() const
   {
     if (!node)
@@ -57,7 +57,7 @@ namespace kiselev
     return !temp->parent;
   }
 
-  template< typename T >
+  template< class T >
   BiTreeIterator< T > BiTreeIterator< T >::next() const
   {
     if (!hasNext())
@@ -81,7 +81,7 @@ namespace kiselev
     return BiTreeIterator< T >{ temp->parent };
   }
 
-  template< typename T >
+  template< class T >
   BiTreeIterator< T > BiTreeIterator< T >::prev() const
   {
     if (!hasPrev())
@@ -105,7 +105,7 @@ namespace kiselev
     return BiTreeIterator< T >{ temp };
   }
 
-  template< typename T >
+  template< class T >
   const T& BiTreeIterator< T >::data() const
   {
     assert(!node);
