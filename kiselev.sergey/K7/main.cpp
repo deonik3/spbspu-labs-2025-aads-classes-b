@@ -1,5 +1,6 @@
+#include <exception>
 #include <functional>
-#include <ostream>
+#include <iostream>
 #include <stdexcept>
 template< class T, class Cmp = std::less< T > >
 struct BiTree
@@ -220,6 +221,34 @@ std::ostream& output(std::ostream& out, BiTree< T >* root, const std::string& te
   {
     throw std::logic_error("Unknown command");
   }
+  return out;
 }
 int main()
-{}
+{
+  size_t lenght;
+  std::cin >> lenght;
+  BiTree< int >* root = nullptr;
+  try
+  {
+    for (size_t i = 0; i < lenght; ++i)
+    {
+      int number = 0;
+      if (!std::cin >> number)
+      {
+        std::cerr << "Incorrect number\n";
+        deleteTree(root);
+        return 1;
+      }
+      root = pushTree(root, number);
+    }
+    std::string command;
+    std::cin >> command;
+    output(std::cout, root, command);
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << e.what() << "\n";
+    deleteTree(root);
+    return 1;
+  }
+}
