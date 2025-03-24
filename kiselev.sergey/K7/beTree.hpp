@@ -13,26 +13,18 @@ namespace kiselev
     BiTree< T >* parent;
   };
   template< class T, class Cmp = std::less< T > >
-  std::pair< const BiTree< T >*, BiTree< T >* > findWithParent(const BiTree< T >* root, const T& value, Cmp = Cmp{});
-
-  template< typename T >
-  const BiTree< T >* find(const BiTree< T >* root, const T& value);
+  BiTree< T >* findForInsert(BiTree< T >* root, const T& value, Cmp = Cmp{});
 
   template< class T, class Cmp = std::less< T > >
   BiTree< T >* pushTree(BiTree< T >* root, const T& value, Cmp = Cmp{});
 
-  template< typename T>
-  const BiTree< T >* find(const BiTree< T >* root, const T& value)
-  {
-    return findWithParent(root, value).first;
-  }
   template< class T, class Cmp >
-  std::pair< const BiTree< T >*, BiTree< T >* > findWithParent(const BiTree< T >* root, const T& value, Cmp cmp)
+  BiTree< T >* findForInsert(BiTree< T >* root, const T& value, Cmp cmp)
   {
     BiTree< T >* parent = nullptr;
     while (root)
     {
-      parent = const_cast< BiTree< T >* >(root);
+      parent = root;
       if (cmp(root->data, value))
       {
         root = root->right;
@@ -43,11 +35,12 @@ namespace kiselev
       }
       else
       {
-        return { root, parent };
+        return nullptr;
       }
     }
-    return { nullptr, parent };
+    return parent;
   }
+
 
   template< class T, class Cmp >
   BiTree< T >* pushTree(BiTree< T >* root, const T& value, Cmp cmp)
@@ -57,7 +50,11 @@ namespace kiselev
       root = new BiTree< T >{value, nullptr, nullptr, nullptr };
     }
     BiTree< T >* temp = root;
-    BiTree< T >* parentTemp = findWithParent(temp, value, cmp).second;
+    BiTree< T >* parentTemp = findForInsert(temp, value, cmp);
+    if (!parentTemp)
+    {
+      return root;
+    }
     if (cmp(value, parentTemp->data))
     {
       parentTemp->left = new BiTree< T >{ value, nullptr, nullptr, parentTemp };

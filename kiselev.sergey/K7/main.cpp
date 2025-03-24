@@ -1,5 +1,7 @@
 #include <exception>
+#include <limits>
 #include <iostream>
+#include <string>
 #include "beTree.hpp"
 #include "iterator.hpp"
 
@@ -14,11 +16,10 @@ std::ostream& output(std::ostream& out, kiselev::BiTree< T >* root, const std::s
       it = it.prev();
     }
     out << it.data();
-    it = it.next();
     while (it.hasNext())
     {
-      out << " " << it.data();
       it = it.next();
+      out << " " << it.data();
     }
   }
   else if (text == "tomin")
@@ -30,8 +31,8 @@ std::ostream& output(std::ostream& out, kiselev::BiTree< T >* root, const std::s
     out << it.data();
     while (it.hasPrev())
     {
-      out << " " << it.data();
       it = it.prev();
+      out << " " << it.data();
     }
   }
   else
@@ -43,14 +44,18 @@ std::ostream& output(std::ostream& out, kiselev::BiTree< T >* root, const std::s
 int main()
 {
   size_t length;
-  std::cin >> length;
+  if (!(std::cin >> length))
+  {
+    std::cerr << "Invalid length\n";
+    return 1;
+  }
   kiselev::BiTree< int >* root = nullptr;
   try
   {
     for (size_t i = 0; i < length; ++i)
     {
       int number = 0;
-      if (!std::cin >> number)
+      if (!(std::cin >> number))
       {
         std::cerr << "Incorrect number\n";
         deleteTree(root);
@@ -59,8 +64,13 @@ int main()
       root = pushTree(root, number);
     }
     std::string command;
-    std::cin >> command;
-    output(std::cout, root, command);
+    if (!(std::cin >> command))
+    {
+      std::cerr << "Invalid command\n";
+      kiselev::deleteTree(root);
+      return 1;
+    }
+    output(std::cout, root, command) << "\n";
     kiselev::deleteTree(root);
     return 0;
   }

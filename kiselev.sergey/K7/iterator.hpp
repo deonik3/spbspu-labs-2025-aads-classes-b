@@ -35,7 +35,7 @@ namespace kiselev
     {
       temp = temp->parent;
     }
-    return !temp->parent;
+    return temp->parent != nullptr;
   }
 
   template< class T >
@@ -50,11 +50,11 @@ namespace kiselev
     {
       return true;
     }
-    while (temp->parent && temp->parent->right)
+    while (temp->parent && temp == temp->parent->right)
     {
       temp = temp->parent;
     }
-    return !temp->parent;
+    return temp->parent != nullptr;
   }
 
   template< class T >
@@ -102,13 +102,13 @@ namespace kiselev
     {
       temp = temp->parent;
     }
-    return BiTreeIterator< T >{ temp };
+    return BiTreeIterator< T >{ temp->parent };
   }
 
   template< class T >
   const T& BiTreeIterator< T >::data() const
   {
-    assert(!node);
+    assert(node);
     return node->data;
   }
 }
