@@ -49,6 +49,10 @@ int main()
     std::cerr << "Invalid length\n";
     return 1;
   }
+  if (length == 0)
+  {
+    return 0;
+  }
   kiselev::BiTree< int >* root = nullptr;
   try
   {
