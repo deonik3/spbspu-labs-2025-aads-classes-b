@@ -8,6 +8,10 @@
 template< typename T >
 std::ostream& output(std::ostream& out, kiselev::BiTree< T >* root, const std::string& text)
 {
+  if (!root)
+  {
+    return out;
+  }
   kiselev::BiTreeIterator< T > it{ root };
   if (text == "tomax")
   {
@@ -70,7 +74,7 @@ int main()
       kiselev::deleteTree(root);
       return 1;
     }
-    if (length == 0)
+    if (length == 0 && command.empty())
     {
       std::cerr << "No elements\n";
       return 1;
