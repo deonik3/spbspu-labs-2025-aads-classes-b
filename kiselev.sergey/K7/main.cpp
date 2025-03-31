@@ -12,32 +12,23 @@ std::ostream& output(std::ostream& out, kiselev::BiTree< T >* root, const std::s
   {
     return out;
   }
-  kiselev::BiTreeIterator< T > it{ root };
   if (text == "tomax")
   {
-    while (it.hasPrev())
+    auto it = kiselev::begin(root);
+    for (; it.hasNext(); it = it.next())
     {
-      it = it.prev();
+      out << it.data() << " ";
     }
     out << it.data();
-    while (it.hasNext())
-    {
-      it = it.next();
-      out << " " << it.data();
-    }
   }
   else if (text == "tomin")
   {
-    while (it.hasNext())
+    auto it = kiselev::rbegin(root);
+    for (; it.hasPrev(); it = it.prev())
     {
-      it = it.next();
+      out << it.data() << " ";
     }
     out << it.data();
-    while (it.hasPrev())
-    {
-      it = it.prev();
-      out << " " << it.data();
-    }
   }
   else
   {

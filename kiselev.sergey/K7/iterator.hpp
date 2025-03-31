@@ -111,5 +111,27 @@ namespace kiselev
     assert(node);
     return node->data;
   }
+
+  template< typename T >
+  BiTreeIterator< T > begin(BiTree< T >* root)
+  {
+    BiTreeIterator< T > it{ root };
+    while (it.hasPrev())
+    {
+      it = it.prev();
+    }
+    return it;
+  }
+
+  template< typename T >
+  BiTreeIterator< T > rbegin(BiTree< T >* root)
+  {
+    BiTreeIterator< T > it{ root };
+    while (it.hasNext())
+    {
+      it = it.next();
+    }
+    return it;
+  }
 }
 #endif
