@@ -84,8 +84,8 @@ namespace
     int v2 = 0;
     if (!(in >> v1 >> v2))
     {
-      return out << "<INVALID COMMAND>";
       in.clear();
+      return out << "<INVALID COMMAND>";
     }
     if (v1 > v2)
     {
@@ -102,10 +102,6 @@ namespace
     else if (command == "avoids")
     {
       out << countAvoids(v1, v2, tree);
-    }
-    else
-    {
-      throw std::logic_error("<INVALID COMMAND>");
     }
     return out;
   }
@@ -129,16 +125,22 @@ int main()
       tree->insert(value);
     }
     std::string command = "";
-    while (std::cin >> command)
+    while (!(std::cin >> command).eof())
     {
+      if (command != "itersects" || command != "covers" || command != "avoids")
+      {
+        std::cerr << "Incorrect command\n";
+        tree->clear();
+        delete tree;
+        return 1;
+      }
       outputWithCommand(std::cout, std::cin, tree, command) << "\n";
     }
     tree->clear();
     delete tree;
   }
-  catch (const std::exception& e)
+  catch (const std::exception&)
   {
-    std::cerr << e.what() << "\n";
     tree->clear();
     delete tree;
     return 1;
