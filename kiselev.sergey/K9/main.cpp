@@ -112,9 +112,9 @@ int main()
 {
   size_t size = 0;
   std::cin >> size;
-  if (size == 0)
+  if (!(std::cin))
   {
-    std::cout << "The sequence is empty\n";
+    std::cerr << "Incorrect size";
     return 1;
   }
   Tree* tree = new Tree{};
@@ -131,6 +131,7 @@ int main()
     {
       outputWithCommand(std::cout, std::cin, tree, command) << "\n";
     }
+    tree->clear();
   }
   catch (...)
   {
