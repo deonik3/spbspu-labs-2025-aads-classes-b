@@ -35,7 +35,9 @@ namespace kiselev
     using Iterator = TriTreeIterator< T >;
     using Node = TreeNode< T >;
 
-    TriTree() = default;
+    TriTree():
+      root(nullptr)
+    {}
     ~TriTree();
     std::pair< TriTreeIterator< T >, bool > insert(std::pair< T, T >);
     void clear() noexcept;

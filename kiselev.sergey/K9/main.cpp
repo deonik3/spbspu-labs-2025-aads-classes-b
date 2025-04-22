@@ -117,7 +117,7 @@ int main()
     std::cerr << "The sequence is empty\n";
     return 1;
   }
-  Tree* tree = nullptr;
+  Tree* tree;
   try
   {
     for (size_t i = 0; i < size; ++i)
