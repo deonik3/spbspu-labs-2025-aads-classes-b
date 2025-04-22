@@ -12,7 +12,7 @@ namespace
   size_t countIntersects(int v1, int v2, const Tree* tree)
   {
     size_t count = 0;
-    for (auto it = tree->begin(); it.hasNext(); it = it.next())
+    for (auto it = tree->begin(); it.node != nullptr; it = it.next())
     {
       value val = it.data();
       if (val.second < v2 || val.first < v1)
@@ -26,7 +26,7 @@ namespace
   size_t countCovers(int v1, int v2, const Tree* tree)
   {
     size_t count = 0;
-    for (auto it = tree->begin(); it.hasNext(); it = it.next())
+    for (auto it = tree->begin(); it.node != nullptr; it = it.next())
     {
       value val = it.data();
       if (v1 <= val.first && v2 >= val.second)
@@ -40,7 +40,7 @@ namespace
   size_t countAvoids(int v1, int v2, const Tree* tree)
   {
     size_t count = 0;
-    for (auto it = tree->begin(); it.hasNext(); it = it.next())
+    for (auto it = tree->begin(); it.node != nullptr; it = it.next())
     {
       value val = it.data();
       if (val.second < v2 || val.first > v1)
@@ -84,6 +84,10 @@ namespace
     {
       out << "<INVALID COMMAND>";
       return out;
+    }
+    if (v1 > v2)
+    {
+      std::swap(v1, v2);
     }
     if (command == "intersects")
     {
