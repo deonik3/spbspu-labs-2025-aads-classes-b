@@ -127,13 +127,15 @@ int main()
     std::string command = "";
     while (!(std::cin >> command).eof())
     {
-      if (command != "itersects" || command != "covers" || command != "avoids")
+      /*
+      if (command != "intersects " || command != "covers " || command != "avoids ")
       {
         std::cerr << "Incorrect command\n";
         tree->clear();
         delete tree;
         return 1;
       }
+      */
       outputWithCommand(std::cout, std::cin, tree, command) << "\n";
     }
     tree->clear();
@@ -141,6 +143,7 @@ int main()
   }
   catch (const std::exception&)
   {
+    std::cerr << "ERROR\n";
     tree->clear();
     delete tree;
     return 1;
