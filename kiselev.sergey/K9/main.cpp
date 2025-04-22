@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <exception>
 #include <iostream>
 #include <istream>
 #include <stdexcept>
@@ -84,6 +85,7 @@ namespace
     if (!(in >> v1 >> v2))
     {
       return out << "<INVALID COMMAND>";
+      in.clear();
     }
     if (v1 > v2)
     {
@@ -103,7 +105,7 @@ namespace
     }
     else
     {
-      out << "<INVALID COMMAND>";
+      throw std::logic_error("<INVALID COMMAND>");
     }
     return out;
   }
@@ -134,8 +136,9 @@ int main()
     tree->clear();
     delete tree;
   }
-  catch (...)
+  catch (const std::exception& e)
   {
+    std::cerr << e.what() << "\n";
     tree->clear();
     delete tree;
     return 1;
