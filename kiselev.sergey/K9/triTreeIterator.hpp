@@ -1,6 +1,7 @@
 #ifndef TRITREEITERATOR_HPP
 #define TRITREEITERATOR_HPP
 #include <functional>
+#include <ostream>
 #include <utility>
 
 namespace kiselev
@@ -28,6 +29,18 @@ namespace kiselev
   };
 
   template< class T >
+  std::ostream& operator<<(std::ostream& output, TriTreeIterator< T >& it)
+  {
+    std::ostream::sentry sentry(output);
+    if (!sentry)
+    {
+      return output;
+    }
+    std::pair< T, T >& pair = it.data();
+    return output << pair.first << pair.second;
+  }
+
+  template< class T >
   TreeNode< T >* max(TreeNode< T >* node)
   {
     while (node->right || node->middle)
@@ -38,7 +51,7 @@ namespace kiselev
   }
 
   template< class T >
-  TreeNode< T > min(TreeNode< T >* node)
+  TreeNode< T >* min(TreeNode< T >* node)
   {
     while (node->left)
     {
@@ -111,12 +124,12 @@ namespace kiselev
     if (node->middle)
     {
       Node* temp = node->middle;
-      return this_t{ min(temp) };
+      return this_t(min(temp));
     }
     if (node->right)
     {
       Node* temp = node->right;
-      return this_t{ min(temp) };
+      return this_t(min(temp));
     }
     Node* temp = node;
     Node* parent = node->parent;
@@ -127,18 +140,18 @@ namespace kiselev
         if (parent->middle)
         {
           Node* temp2 = parent->middle;
-          return this_t{ min(temp2) };
+          return this_t(min(temp2));
         }
         return this_t{ parent };
       }
       if (parent->middle == temp)
       {
-        return this_t{ parent };
+        return this_t(parent);
       }
       temp = parent;
       parent = parent->parent;
     }
-    return this_t{ nullptr };
+    return this_t(nullptr);
   }
 
   template< class T, class Cmp >
@@ -147,12 +160,12 @@ namespace kiselev
     if (node->left)
     {
       Node* temp = node->left;
-      return this_t{ max(temp) };
+      return this_t(max(temp));
     }
     if (node->middle)
     {
-      Node* temp = temp->middle;
-      return this_t{ max(temp) };
+      Node* temp = node->middle;
+      return this_t(max(temp));
     }
     Node* temp = node;
     Node* parent = node->parent;
@@ -163,18 +176,18 @@ namespace kiselev
         if (parent->middle)
         {
           Node* temp2 = parent->middle;
-          return this_t{ max(temp2) };
+          return this_t(max(temp2));
         }
         return parent;
       }
       if (parent->middle == temp)
       {
-        return this_t{ parent };
+        return this_t(parent);
       }
       temp = parent;
       parent = parent->parent;
     }
-    return this_t{ nullptr };
+    return this_t(nullptr);
   }
 
   template< class T, class Cmp >

@@ -121,19 +121,19 @@ namespace kiselev
   template< class T, class Cmp >
   TriTreeIterator< T > TriTree< T, Cmp >::begin() const noexcept
   {
-    return Iterator{ min(root) };
+    return Iterator(min(root));
   }
 
   template< class T, class Cmp >
   TriTreeIterator< T > TriTree< T, Cmp >::rbegin() const noexcept
   {
-    return Iterator{ max(root) };
+    return Iterator(max(root));
   }
 
   template< class T, class Cmp >
   TriTreeIterator< T > TriTree< T, Cmp >::end() const noexcept
   {
-    return Iterator{ nullptr };
+    return Iterator(nullptr);
   }
 }
 #endif
