@@ -16,7 +16,7 @@ namespace
     for (auto it = tree->begin(); it.node != nullptr; it = it.next())
     {
       value val = it.data();
-      if (!(val.second < v1 || val.first > v2))
+      if (v1 <= val.second || v2 >= val.first )
       {
         ++count;
       }
@@ -30,7 +30,7 @@ namespace
     for (auto it = tree->begin(); it.node != nullptr; it = it.next())
     {
       value val = it.data();
-      if (v1 <= val.first && v2 >= val.second)
+      if (val.first >= v1 && val.second <= v2)
       {
         ++count;
       }
@@ -44,7 +44,7 @@ namespace
     for (auto it = tree->begin(); it.node != nullptr; it = it.next())
     {
       value val = it.data();
-      if (val.second < v1 || val.first > v2)
+      if (v1 > val.second || v2 < val.first)
       {
         ++count;
       }
