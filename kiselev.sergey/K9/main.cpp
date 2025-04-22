@@ -1,6 +1,7 @@
 #include <cstddef>
 #include <iostream>
 #include <istream>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include "triTree.hpp"
@@ -15,7 +16,7 @@ namespace
     for (auto it = tree->begin(); it.node != nullptr; it = it.next())
     {
       value val = it.data();
-      if (val.second < v2 || val.first < v1)
+      if (!(val.second < v1 || val.first > v2))
       {
         ++count;
       }
@@ -43,7 +44,7 @@ namespace
     for (auto it = tree->begin(); it.node != nullptr; it = it.next())
     {
       value val = it.data();
-      if (val.second < v2 || val.first > v1)
+      if (val.second < v1 || val.first > v2)
       {
         ++count;
       }
@@ -82,12 +83,11 @@ namespace
     int v2 = 0;
     if (!(in >> v1 >> v2))
     {
-      out << "<INVALID COMMAND>";
-      return out;
+      return out << "<INVALID COMMAND>";
     }
     if (v1 > v2)
     {
-      std::swap(v1, v2);
+      return out << "<INVALID COMMAND>";
     }
     if (command == "intersects")
     {
@@ -114,7 +114,7 @@ int main()
   std::cin >> size;
   if (size == 0)
   {
-    std::cerr << "The sequence is empty\n";
+    std::cout << "The sequence is empty\n";
     return 1;
   }
   Tree* tree = new Tree{};
