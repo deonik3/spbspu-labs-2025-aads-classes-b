@@ -6,12 +6,16 @@
 namespace kiselev
 {
   template< class T >
-  struct TriNode;
+  struct TreeNode;
   template< typename T, class Cmp = std::less< T > >
   struct TriTreeIterator
   {
     using this_t = TriTreeIterator< T >;
-    using Node = TriNode< T >;
+    using Node = TreeNode< T >;
+    TriTreeIterator() = default;
+    TriTreeIterator(Node* nod):
+      node(nod)
+    {}
     bool hasNext() const;
     bool hasPrev() const;
 
@@ -24,7 +28,7 @@ namespace kiselev
   };
 
   template< class T >
-  TriNode< T >* max(TriNode< T >* node)
+  TreeNode< T >* max(TreeNode< T >* node)
   {
     while (node->right || node->middle)
     {
@@ -34,7 +38,7 @@ namespace kiselev
   }
 
   template< class T >
-  TriNode< T > min(TriNode< T >* node)
+  TreeNode< T > min(TreeNode< T >* node)
   {
     while (node->left)
     {

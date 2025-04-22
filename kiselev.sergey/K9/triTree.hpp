@@ -29,7 +29,7 @@ namespace kiselev
     }
   };
 
-  template< class T, class Cmp >
+  template< class T, class Cmp = std::less< T > >
   struct TriTree
   {
     using Iterator = TriTreeIterator< T >;
@@ -37,8 +37,9 @@ namespace kiselev
 
     TriTree() = default;
     ~TriTree();
-    std::pair< TriTreeIterator< T >, bool >& insert(std::pair< T, T >);
+    std::pair< TriTreeIterator< T >, bool > insert(std::pair< T, T >);
     void clear() noexcept;
+    void clear(Node* root) noexcept;
     TriTreeIterator< T > begin() const noexcept;
     TriTreeIterator< T > rbegin() const noexcept;
     TriTreeIterator< T > end() const noexcept;
@@ -56,6 +57,11 @@ namespace kiselev
   template< class T, class Cmp >
   void TriTree< T, Cmp >::clear() noexcept
   {
+    clear(root);
+  }
+  template< class T, class Cmp >
+  void TriTree< T, Cmp >::clear(Node* root) noexcept
+  {
     if (!root)
     {
       return;
@@ -67,12 +73,12 @@ namespace kiselev
   }
 
   template< class T, class Cmp >
-  std::pair< TriTreeIterator< T >, bool >& TriTree< T, Cmp >::insert(std::pair< T, T > value)
+  std::pair< TriTreeIterator< T >, bool > TriTree< T, Cmp >::insert(std::pair< T, T > value)
   {
     if (!root)
     {
       root = new Node(value);
-      return std::make_pair(Iterator{ root }, true );
+      return std::make_pair(Iterator(root), true );
     }
     Node* temp = root;
     Node* parent = nullptr;
@@ -83,7 +89,7 @@ namespace kiselev
       {
         temp = temp->left;
       }
-      else if (cmp(temp->data.first, value.first) && cmp(value.second, temp->data.second))
+      else if (!cmp(temp->data.first, value.first) && cmp(value.second, temp->data.second))
       {
         temp = temp->middle;
       }
@@ -93,7 +99,7 @@ namespace kiselev
       }
       else
       {
-        return std::make_pair(Iterator{ temp }, false );
+        return std::make_pair(Iterator(temp), false );
       }
     }
     Node* newNode = new Node(value, parent);
@@ -109,7 +115,7 @@ namespace kiselev
     {
       parent->right = newNode;
     }
-    return std::make_pair(Iterator{ newNode }, true);
+    return std::make_pair(Iterator(newNode), true);
   }
 
   template< class T, class Cmp >
