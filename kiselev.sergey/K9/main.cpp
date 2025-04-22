@@ -132,10 +132,12 @@ int main()
       outputWithCommand(std::cout, std::cin, tree, command) << "\n";
     }
     tree->clear();
+    delete tree;
   }
   catch (...)
   {
     tree->clear();
+    delete tree;
     return 1;
   }
 }

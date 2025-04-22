@@ -38,7 +38,6 @@ namespace kiselev
     TriTree():
       root(nullptr)
     {}
-    ~TriTree();
     std::pair< TriTreeIterator< T >, bool > insert(std::pair< T, T >);
     void clear() noexcept;
     void clear(Node* root) noexcept;
@@ -51,15 +50,10 @@ namespace kiselev
   };
 
   template< class T, class Cmp >
-  TriTree< T, Cmp >::~TriTree()
-  {
-    clear();
-  }
-
-  template< class T, class Cmp >
   void TriTree< T, Cmp >::clear() noexcept
   {
     clear(root);
+    root = nullptr;
   }
   template< class T, class Cmp >
   void TriTree< T, Cmp >::clear(Node* root) noexcept
