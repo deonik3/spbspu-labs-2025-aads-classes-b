@@ -1,8 +1,8 @@
-#include <cstddef>
 #include <exception>
 #include <iostream>
 #include <istream>
 #include <string>
+#include <limits>
 #include "triTree.hpp"
 #include "triTreeIterator.hpp"
 
@@ -69,11 +69,12 @@ namespace
 
   std::ostream& outputWithCommand(std::ostream& out, std::istream& in, Tree* tree, const std::string& command)
   {
-    int v1 = 0;
-    int v2 = 0;
+    int v1;
+    int v2;
     if (!(in >> v1 >> v2) || v1 > v2)
     {
       in.clear();
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       return out << "<INVALID COMMAND>";
     }
     if (command == "intersects")
