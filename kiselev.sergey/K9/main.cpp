@@ -1,6 +1,7 @@
 #include <exception>
 #include <iostream>
 #include <istream>
+#include <stdexcept>
 #include <string>
 #include <limits>
 #include "triTree.hpp"
@@ -131,8 +132,7 @@ int main()
     {
       if (!checkCommand(command))
       {
-        std::cerr << "Incorrect command\n";
-        return 1;
+        throw std::logic_error("Incorrect command");
       }
       outputWithCommand(std::cout, std::cin, tree, command) << "\n";
     }
