@@ -2,11 +2,9 @@
 #include <exception>
 #include <iostream>
 #include <istream>
-#include <stdexcept>
 #include <string>
-#include <utility>
-#include <functional>
 #include "triTree.hpp"
+#include "triTreeIterator.hpp"
 
 using Tree = kiselev::TriTree< int >;
 using value = std::pair< int, int >;
@@ -15,13 +13,18 @@ namespace
   size_t countIntersects(int v1, int v2, const Tree* tree)
   {
     size_t count = 0;
-    for (auto it = tree->begin(); it.hasNext(); it = it.next())
+    auto it = tree->begin();
+    for (; it.hasNext(); it = it.next())
     {
       value val = it.data();
-      if (!(val.second < v1 || val.first > v2))
+      if (v2 > val.first && v1 < val.second)
       {
         ++count;
       }
+    }
+    if (v2 > it.data().first && v1 < it.data().second)
+    {
+      ++count;
     }
     return count;
   }
@@ -29,13 +32,18 @@ namespace
   size_t countCovers(int v1, int v2, const Tree* tree)
   {
     size_t count = 0;
-    for (auto it = tree->begin(); it.hasNext(); it = it.next())
+    auto it = tree->begin();
+    for (; it.hasNext(); it = it.next())
     {
       value val = it.data();
-      if (val.first >= v1 && v2 >= val.second)
+      if (v1 <= val.first && v2 >= val.second)
       {
         ++count;
       }
+    }
+    if (v1 <= it.data().first && v2 >= it.data().second)
+    {
+      ++count;
     }
     return count;
   }
@@ -43,13 +51,18 @@ namespace
   size_t countAvoids(int v1, int v2, const Tree* tree)
   {
     size_t count = 0;
-    for (auto it = tree->begin(); it.hasNext(); it = it.next())
+    auto it = tree->begin();
+    for (; it.hasNext(); it = it.next())
     {
       value val = it.data();
-      if (v1 > val.second || v2 < val.first)
+      if (val.second < v1 || val.first > v2)
       {
         ++count;
       }
+    }
+    if (it.data().second < v1 || it.data().first > v2)
+    {
+      ++count;
     }
     return count;
   }
@@ -58,13 +71,9 @@ namespace
   {
     int v1 = 0;
     int v2 = 0;
-    if (!(in >> v1 >> v2))
+    if (!(in >> v1 >> v2) || v1 > v2)
     {
       in.clear();
-      return out << "<INVALID COMMAND>";
-    }
-    if (v1 > v2)
-    {
       return out << "<INVALID COMMAND>";
     }
     if (command == "intersects")

@@ -1,5 +1,6 @@
 #ifndef TRITREE_HPP
 #define TRITREE_HPP
+#include <cstddef>
 #include <functional>
 #include <stdexcept>
 #include <utility>
@@ -37,15 +38,17 @@ namespace kiselev
     using Node = TreeNode< T >;
 
     TriTree():
-      root(nullptr)
+      root(nullptr),
+      size(0)
     {}
-    std::pair< TriTreeIterator< T >, bool > insert(std::pair< T, T >);
+    Node* insert(std::pair< T, T >);
     void clear() noexcept;
     void clear(Node* root) noexcept;
     TriTreeIterator< T > begin() const noexcept;
     TriTreeIterator< T > rbegin() const noexcept;
 
     Node* root;
+    size_t size;
     Cmp cmp;
   };
 
@@ -69,41 +72,42 @@ namespace kiselev
   }
 
   template< class T, class Cmp >
-  std::pair< TriTreeIterator< T >, bool > TriTree< T, Cmp >::insert(std::pair< T, T > value)
+  TreeNode< T >* TriTree< T, Cmp >::insert(std::pair< T, T > value)
   {
     if (!root)
     {
       root = new Node(value);
-      return std::make_pair(Iterator(root), true );
+      size++;
+      return root;
     }
     Node* temp = root;
     Node* parent = nullptr;
     while (temp)
     {
       parent = temp;
-      if (cmp(value.first, temp->data.first))
+      if (cmp(value.second, temp->data.first))
       {
         temp = temp->left;
       }
-      else if (cmp(temp->data.second, value.second))
+      else if (value.first > temp->data.second)
       {
         temp = temp->right;
       }
-      else if (cmp(temp->data.first, value.first) && !cmp(temp->data.second, value.second))
+      else if (cmp(temp->data.first, value.first) && cmp(value.second, temp->data.second))
       {
         temp = temp->middle;
       }
       else
       {
-        return std::make_pair(Iterator(nullptr), false);
+        return nullptr;
       }
     }
     Node* newNode = new Node(value, parent);
-    if (cmp(value.first, parent->data.first) || (value.first == parent->data.first && cmp(value.second, parent->data.second)))
+    if (cmp(value.second, parent->data.first))
     {
       parent->left = newNode;
     }
-    else if (cmp(parent->data.first, value.first) || (parent->data.first == value.first && cmp(parent->data.second, value.second)))
+    else if (cmp(parent->data.second, value.first))
     {
       parent->right = newNode;
     }
@@ -111,7 +115,8 @@ namespace kiselev
     {
       parent->middle = newNode;
     }
-    return std::make_pair(Iterator(newNode), true);
+    size++;
+    return root;
   }
 
   template< class T, class Cmp >
