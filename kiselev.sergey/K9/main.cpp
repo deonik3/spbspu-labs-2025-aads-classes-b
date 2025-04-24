@@ -89,11 +89,23 @@ namespace
     {
       out << countAvoids(v1, v2, tree);
     }
-    else
-    {
-      throw std::logic_error("Incorrect command");
-    }
     return out;
+  }
+  bool checkCommand(const std::string& str)
+  {
+    if (str == "intersects")
+    {
+      return true;
+    }
+    else if (str == "covers")
+    {
+      return true;
+    }
+    else if (str == "avoids")
+    {
+      return true;
+    }
+    return false;
   }
 }
 int main()
@@ -117,6 +129,11 @@ int main()
     std::string command = "";
     while (!(std::cin >> command).eof())
     {
+      if (!checkCommand(command))
+      {
+        std::cerr << "Incorrect command\n";
+        return 1;
+      }
       outputWithCommand(std::cout, std::cin, tree, command) << "\n";
     }
     tree->clear();

@@ -29,18 +29,6 @@ namespace kiselev
   };
 
   template< class T >
-  std::ostream& operator<<(std::ostream& output, TriTreeIterator< T >& it)
-  {
-    std::ostream::sentry sentry(output);
-    if (!sentry)
-    {
-      return output;
-    }
-    std::pair< T, T >& pair = it.data();
-    return output << pair.first << pair.second;
-  }
-
-  template< class T >
   TreeNode< T >* max(TreeNode< T >* node)
   {
     while (node->right || node->middle)
