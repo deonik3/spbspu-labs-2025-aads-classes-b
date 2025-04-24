@@ -86,7 +86,7 @@ namespace kiselev
       temp = parent;
       parent = parent->parent;
     }
-    return false;
+    return !node ? false : true;
   }
 
   template< class T, class Cmp >

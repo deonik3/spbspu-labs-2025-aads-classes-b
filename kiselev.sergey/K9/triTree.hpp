@@ -2,6 +2,7 @@
 #define TRITREE_HPP
 #include <functional>
 #include <stdexcept>
+#include <utility>
 #include "triTreeIterator.hpp"
 
 namespace kiselev
@@ -43,7 +44,6 @@ namespace kiselev
     void clear(Node* root) noexcept;
     TriTreeIterator< T > begin() const noexcept;
     TriTreeIterator< T > rbegin() const noexcept;
-    TriTreeIterator< T > end() const noexcept;
 
     Node* root;
     Cmp cmp;
@@ -85,31 +85,31 @@ namespace kiselev
       {
         temp = temp->left;
       }
-      else if (!cmp(temp->data.first, value.first) && cmp(value.second, temp->data.second))
-      {
-        temp = temp->middle;
-      }
       else if (cmp(temp->data.second, value.second))
       {
         temp = temp->right;
       }
+      else if (cmp(temp->data.first, value.first) && !cmp(temp->data.second, value.second))
+      {
+        temp = temp->middle;
+      }
       else
       {
-        return std::make_pair(Iterator(temp), false );
+        return std::make_pair(Iterator(nullptr), false);
       }
     }
     Node* newNode = new Node(value, parent);
-    if (cmp(newNode->data.first, parent->data.first))
+    if (cmp(value.first, parent->data.first) || (value.first == parent->data.first && cmp(value.second, parent->data.second)))
     {
       parent->left = newNode;
     }
-    else if (cmp(parent->data.first, newNode->data.first) && cmp(newNode->data.second, parent->data.second))
+    else if (cmp(parent->data.first, value.first) || (parent->data.first == value.first && cmp(parent->data.second, value.second)))
     {
-      parent->middle = newNode;
+      parent->right = newNode;
     }
     else
     {
-      parent->right = newNode;
+      parent->middle = newNode;
     }
     return std::make_pair(Iterator(newNode), true);
   }
@@ -124,12 +124,6 @@ namespace kiselev
   TriTreeIterator< T > TriTree< T, Cmp >::rbegin() const noexcept
   {
     return Iterator(max(root));
-  }
-
-  template< class T, class Cmp >
-  TriTreeIterator< T > TriTree< T, Cmp >::end() const noexcept
-  {
-    return Iterator(nullptr);
   }
 }
 #endif

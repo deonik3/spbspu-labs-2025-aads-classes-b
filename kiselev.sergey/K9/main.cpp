@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <functional>
 #include "triTree.hpp"
 
 using Tree = kiselev::TriTree< int >;
@@ -14,10 +15,10 @@ namespace
   size_t countIntersects(int v1, int v2, const Tree* tree)
   {
     size_t count = 0;
-    for (auto it = tree->begin(); it.node != nullptr; it = it.next())
+    for (auto it = tree->begin(); it.hasNext(); it = it.next())
     {
       value val = it.data();
-      if (v1 <= val.second && v2 >= val.first )
+      if (!(val.second < v1 || val.first > v2))
       {
         ++count;
       }
@@ -28,10 +29,10 @@ namespace
   size_t countCovers(int v1, int v2, const Tree* tree)
   {
     size_t count = 0;
-    for (auto it = tree->begin(); it.node != nullptr; it = it.next())
+    for (auto it = tree->begin(); it.hasNext(); it = it.next())
     {
       value val = it.data();
-      if (v1 <= val.first && v2 >= val.second)
+      if (val.first >= v1 && v2 >= val.second)
       {
         ++count;
       }
@@ -42,7 +43,7 @@ namespace
   size_t countAvoids(int v1, int v2, const Tree* tree)
   {
     size_t count = 0;
-    for (auto it = tree->begin(); it.node != nullptr; it = it.next())
+    for (auto it = tree->begin(); it.hasNext(); it = it.next())
     {
       value val = it.data();
       if (v1 > val.second || v2 < val.first)
@@ -53,31 +54,6 @@ namespace
     return count;
   }
 
-  /*
-  std::ostream& outputToMax(std::ostream& out, const Tree* tree)
-  {
-    Tree::Iterator it = tree->begin();
-    out << it;
-    it.next();
-    for (; it.hasNext(); it = it.next())
-    {
-      out << ' ' << it;
-    }
-    return out;
-  }
-
-  std::ostream& outputToMin(std::ostream& out, const Tree* tree)
-  {
-    Tree::Iterator it = tree->rbegin();
-    out << it;
-    it = it.prev();
-    for (; it.hasPrev(); it = it.prev())
-    {
-      out << ' ' << it;
-    }
-    return out;
-  }
-  */
   std::ostream& outputWithCommand(std::ostream& out, std::istream& in, Tree* tree, const std::string& command)
   {
     int v1 = 0;
@@ -103,6 +79,10 @@ namespace
     {
       out << countAvoids(v1, v2, tree);
     }
+    else
+    {
+      throw std::logic_error("Incorrect command");
+    }
     return out;
   }
 }
@@ -127,15 +107,6 @@ int main()
     std::string command = "";
     while (!(std::cin >> command).eof())
     {
-      /*
-      if (command != "intersects " || command != "covers " || command != "avoids ")
-      {
-        std::cerr << "Incorrect command\n";
-        tree->clear();
-        delete tree;
-        return 1;
-      }
-      */
       outputWithCommand(std::cout, std::cin, tree, command) << "\n";
     }
     tree->clear();
