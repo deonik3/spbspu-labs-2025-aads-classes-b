@@ -84,7 +84,7 @@ namespace kiselev
     {
       return false;
     }
-    if (node->left || node->middle)
+    if (node->left)
     {
       return true;
     }
@@ -92,11 +92,7 @@ namespace kiselev
     Node* parent = node->parent;
     while (parent)
     {
-      if (parent->right == temp && (parent->middle || parent->left))
-      {
-        return true;
-      }
-      if (parent->middle == temp && parent->left)
+      if (parent->left != temp)
       {
         return true;
       }
@@ -144,35 +140,20 @@ namespace kiselev
   {
     if (node->left)
     {
-      Node* temp = node->left;
-      return this_t(max(temp));
-    }
-    if (node->middle)
-    {
-      Node* temp = node->middle;
-      return this_t(max(temp));
+      return this_t(max(node->left));
     }
     Node* temp = node;
     Node* parent = node->parent;
     while (parent)
     {
-      if (parent->right == temp)
-      {
-        if (parent->middle)
-        {
-          Node* temp2 = parent->middle;
-          return this_t(max(temp2));
-        }
-        return parent;
-      }
-      if (parent->middle == temp)
+      if (parent->left != temp)
       {
         return this_t(parent);
       }
       temp = parent;
       parent = parent->parent;
     }
-    return this_t(nullptr);
+    return this_t(temp);
   }
 
   template< class T, class Cmp >
